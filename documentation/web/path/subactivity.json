@@ -1,0 +1,133 @@
+{
+    "/v0/subactivity/create": {
+        "post": {
+            "tags": [
+                "Subactivity"
+            ],
+            "summary": "Create Subactivity",
+            "operationId": "createSubactivity",
+            "consumes": [
+                "application/json"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "parameters": [
+                {
+                    "in": "body",
+                    "name": "body",
+                    "description": "Request body for create Subactivity, for category is enum (Rawat,Panen,Transportasi)",
+                    "required": true,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "accountNumber": {
+                                "type": "string",
+                                "example": "SA-001"
+                            },
+                            "name": {
+                                "status": "string",
+                                "example": "Rawat Gawangan"
+                            },
+                            "description": {
+                                "status": "string",
+                                "example": "Rawat Gawangan dilakukan setiap hari"
+                            },
+                            "category": {
+                                "status": "string",
+                                "example": "Rawat"
+                            }
+                        }
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "example": "success"
+                            },
+                            "code": {
+                                "example": "200"
+                            }
+                        }
+                    }
+                }
+            },
+            "security": [
+                {
+                    "authtoken": []
+                }
+            ]
+        }
+    },
+    "/v0/subactivity/": {
+        "get": {
+            "tags": [
+                "Subactivity"
+            ],
+            "operationId": "getAll",
+            "summary": "Get All subactivity",
+            "produces": [
+                "application/json"
+            ],
+            "parameters": [
+               
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "example": "success"
+                            },
+                            "code": {
+                                "example": "200"
+                            },
+                            "response": {
+                                "example": {
+                                    "docs": [
+                                        {
+                                            "id": "d9decb38-7a7b-4e8e-ae7e-bc322ba20559",
+                                            "accountNumber": "SA-001",
+                                            "name": "Rawat Gawangan",
+                                            "description": "Rawat Gawangan dilakukan setiap hari",
+                                            "category": "Rawat"
+                                        },
+                                        {
+                                            "id": "d9decb38-7a7b-4e8e-ae7e-bc322ba20559",
+                                            "accountNumber": "SA-002",
+                                            "name": "Rawat Gawangan 2",
+                                            "description": "Rawat Gawangan dilakukan setiap hari",
+                                            "category": "Rawat"
+                                        }
+                                    ],
+                                    "totalDocs": 2,
+                                    "page": 1,
+                                    "totalPages": 1,
+                                    "limit": 10,
+                                    "prevPage": 1,
+                                    "nextPage": 1,
+                                    "hasPrevPage": false,
+                                    "hasNextPage": false,
+                                    "pagingCounter": 1
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "security": [
+                {
+                    "authtoken": []
+                }
+            ]
+        }
+    }
+   
+}

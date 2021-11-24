@@ -1,0 +1,7 @@
+node_modules
+.env
+logs
+.serverless
+rest.http
+build
+package-lock.json

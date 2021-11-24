@@ -1,0 +1,26 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Sample API Documentation for Web.",
+        "version": "0.0.1",
+        "title": "Sample Server"
+    },
+    "host": "localhost:5011",
+    "basePath": "/api/sample-server/web",
+    "tags": [
+       
+        {
+            "name": "Subactivity",
+            "description": "list of Subactivity API"
+        }   ],
+    "schemes": [
+        "http"
+    ],
+    "securityDefinitions": {
+        "authtoken": {
+            "type": "apiKey",
+            "name": "authorization",
+            "in": "header"
+        }
+    }
+}

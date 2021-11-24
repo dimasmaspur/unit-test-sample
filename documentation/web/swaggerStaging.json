@@ -1,0 +1,26 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Arvis Eplant Server API Documentation for Web.",
+        "version": "0.0.1",
+        "title": "Arvis Eplant Server"
+    },
+    "host": "eplant-stg.arvis-engineering.net",
+    "basePath": "/api/eplant-server/web",
+    "tags": [
+        {
+            "name": "Eplant Server",
+            "description": "list of Eplant Server API"
+        }
+    ],
+    "schemes": [
+        "https"
+    ],
+    "securityDefinitions": {
+        "authtoken": {
+            "type": "apiKey",
+            "name": "authorization",
+            "in": "header"
+        }
+    }
+}

@@ -1,0 +1,39 @@
+service: arvis-crm-event
+
+plugins:
+    - serverless-dotenv-plugin
+
+provider:
+    name: aws
+    stage: ${opt:stage, 'remotedev'}
+    runtime: nodejs10.x
+    memorySize: 512
+    timeout: 15
+    region: ap-southeast-1
+    apiName: ${self:service}-${opt:stage, 'remotedev'}-api
+    endpointType: regional
+    deploymentBucket:
+        name: arvis-artifact
+
+package:
+    excludeDevDependencies: true
+    patterns:
+        - '!.git/**'
+        - '!source/**'
+        - '!logs/**'
+        - '!.vscode/**'
+        - '!.prettierrc'
+        - '!rest.http'
+        - '!tsconfig.json'
+
+functions:
+    api:
+        name: ${self:service}-${opt:stage, 'remotedev'}-function
+        handler: build/lambda.handler
+        events:
+            - http:
+                  method: ANY
+                  path: '{proxy+}'
+                  cors: true
+
+

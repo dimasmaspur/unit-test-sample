@@ -1,0 +1,66 @@
+default:
+  image: node:12.16.1
+
+stages:
+  - build
+  - deploy
+
+variables:
+  EPLANT_ARTIFACT_BUCKET: "eplant-artifact"
+app_server_build:
+  stage: build
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - apt-get update && apt-get install -y zip
+    - npm install -g typescript prettier
+    - npm install
+    - npm run build
+    - find . -type d -exec chmod 775 {} +
+    - zip -r eplant-server.zip . -x '.git/*' -x '.gitignore' -x './cronjob/*' -x '.env' -x './config/*' -x './logs/*'
+    - echo 'Build successful'
+  artifacts:
+    paths:
+      - eplant-server.zip
+    expire_in: 1 hour
+  only:
+    - development
+    - staging
+
+app_server_deploy_development:
+  stage: deploy
+  image: python:latest
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY_DEV" | base64 --decode | tr -d '\r' | ssh-add -
+    - pip3 install awscli
+    - echo 'Uploading artifact file'
+    - aws s3 cp eplant-server.zip s3://$EPLANT_ARTIFACT_BUCKET/development/app-server/latest/
+    - aws s3 cp eplant-server.zip s3://$EPLANT_ARTIFACT_BUCKET/development/app-server/$(date "+%y%m%d%H%M%S")/
+    - echo 'Deploying development server'
+    - ./dev-deploy.sh
+    - echo 'successfully deployed development'  
+  only:
+    - development
+  # when: manual
+
+app_server_deploy_staging:
+  stage: deploy
+  image: python:latest
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY_STG" | base64 --decode | tr -d '\r' | ssh-add -
+    - pip3 install awscli
+    - echo 'Uploading artifact file'
+    - aws s3 cp eplant-server.zip s3://$EPLANT_ARTIFACT_BUCKET/staging/app-server/latest/
+    - aws s3 cp eplant-server.zip s3://$EPLANT_ARTIFACT_BUCKET/staging/app-server/$(date "+%y%m%d%H%M%S")/
+    - echo 'Deploying staging server'
+    - ./stg-deploy.sh
+    - echo 'successfully deployed staging'  
+  only:
+    - staging
+  # when: manual
